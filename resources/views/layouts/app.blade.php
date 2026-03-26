@@ -186,7 +186,7 @@
                                     <li>
                                         <form method="POST" action="{{ route('web.logout') }}">
                                             @csrf
-                                            <button type="submit" class="dropdown-item">
+                                            <button type="submit" class="dropdown-item text-danger">
                                                 <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                                             </button>
                                         </form>

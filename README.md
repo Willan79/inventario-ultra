@@ -1,59 +1,223 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Inventario Ultra
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema de gestión de inventario empresarial desarrollado con Laravel 12.
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.2+
+- Composer
+- MySQL 8.0+
+- Node.js 18+ (opcional, para assets)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instalación
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Clonar el repositorio**
+```bash
+git clone <repo-url>
+cd inventario_ultra
+```
 
-## Learning Laravel
+2. **Instalar dependencias**
+```bash
+composer install
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+3. **Configurar entorno**
+```bash
+cp .env.example .env
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **Configurar base de datos** en `.env`:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=inventario_ultra
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Laravel Sponsors
+5. **Generar clave de aplicación**
+```bash
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+6. **Ejecutar migraciones y seeders**
+```bash
+php artisan migrate
+php artisan db:seed
+```
 
-### Premium Partners
+7. **Iniciar el servidor**
+```bash
+php artisan serve
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+8. **Acceder a la aplicación**
+```
+http://localhost:8000
+```
 
-## Contributing
+## Credenciales por defecto
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Super Admin | admin@example.com | password |
+| Admin | manager@example.com | password |
+| Usuario | user@example.com | password |
 
-## Code of Conduct
+## Estructura del Proyecto
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+app/
+├── Application/           # Capa de aplicación
+│   ├── DTOs/            # Data Transfer Objects
+│   └── Services/         # Servicios de negocio
+├── Domain/               # Capa de dominio
+│   ├── Entities/         # Entidades de negocio
+│   ├── Exceptions/       # Excepciones del dominio
+│   ├── Repositories/     # Interfaces de repositorio
+│   └── ValueObjects/    # Objetos de valor
+├── Http/
+│   └── Controllers/
+│       └── Web/          # Controladores web
+├── Infrastructure/       # Capa de infraestructura
+│   └── Persistence/
+│       └── Eloquent/
+│           ├── Models/   # Modelos Eloquent
+│           └── Repositories/ # Implementaciones
+└── Models/               # Modelos principales (User)
+```
 
-## Security Vulnerabilities
+## Módulos del Sistema
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Productos
+Gestión de productos con SKU, código de barras, categorías y niveles de stock.
 
-## License
+**Permisos:** `products.view`, `products.create`, `products.update`, `products.delete`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Categorías
+Categorías jerárquicas para organizar productos.
+
+**Permisos:** `categories.view`, `categories.create`, `categories.update`, `categories.delete`
+
+### Almacenes
+Control de múltiples almacenes/ubicaciones.
+
+**Permisos:** `warehouses.view`, `warehouses.create`, `warehouses.update`, `warehouses.delete`
+
+### Inventario
+Control de stock con operaciones de:
+- Agregar stock
+- Remover stock
+- Ajustar stock
+- Transferir entre almacenes
+- Stock bajo
+
+**Permisos:** `inventory.view`, `inventory.add`, `inventory.remove`, `inventory.adjust`, `inventory.transfer`
+
+### Proveedores
+Gestión de proveedores y relación con productos.
+
+**Permisos:** `suppliers.view`, `suppliers.create`, `suppliers.update`, `suppliers.delete`
+
+### Órdenes de Compra
+Creación y gestión de órdenes de compra a proveedores.
+
+**Flujo:** Borrador → Enviada → Recibida → Stock agregado automáticamente
+
+**Permisos:** `suppliers.view`, `suppliers.create`, `suppliers.update`, `suppliers.delete`
+
+### Movimientos
+Historial completo de todas las operaciones de stock.
+
+**Permisos:** `movements.view`
+
+### Usuarios
+Gestión de usuarios y roles (solo super admin).
+
+**Permisos:** `users.view`, `users.create`, `users.update`, `users.delete`
+
+## Roles y Permisos
+
+| Rol | Descripción | Permisos |
+|-----|-------------|----------|
+| **super** | Administrador total | Todos |
+| **admin** | Administrador sin gestión de usuarios | Todos excepto usuarios |
+| **user** | Solo lectura | Ver módulos |
+
+## Base de Datos
+
+### Tablas principales
+
+- `users` - Usuarios del sistema
+- `products` - Catálogo de productos
+- `categories` - Categorías jerárquicas
+- `warehouses` - Almacenes/ubicaciones
+- `inventories` - Stock por producto y almacén
+- `movements` - Historial de movimientos
+- `stock_reservations` - Reservas de stock
+- `suppliers` - Proveedores
+- `product_supplier` - Relación productos-proveedores
+- `purchase_orders` - Órdenes de compra
+- `purchase_order_items` - Items de órdenes
+
+### Relaciones
+
+```
+Products ←→ Categories (N:1)
+Products ←→ Suppliers (N:N) → product_supplier
+Products ←→ Warehouses → Inventories (N:1)
+Products → Movements (1:N)
+PurchaseOrders → Suppliers (N:1)
+PurchaseOrders → PurchaseOrderItems (1:N)
+PurchaseOrders → Movements (1:N) [al recibir]
+```
+
+## Rutas Web
+
+| URL | Descripción |
+|-----|-------------|
+| `/` | Dashboard |
+| `/productos` | Gestión de productos |
+| `/almacenes` | Gestión de almacenes |
+| `/inventario` | Control de stock |
+| `/inventario/agregar-stock` | Agregar stock |
+| `/inventario/remover-stock` | Remover stock |
+| `/inventario/ajustar-stock` | Ajustar stock |
+| `/inventario/transferir` | Transferir entre almacenes |
+| `/inventario/stock-bajo` | Ver stock bajo |
+| `/movimientos` | Ver movimientos |
+| `/categorias` | Gestión de categorías |
+| `/proveedores` | Gestión de proveedores |
+| `/ordenes-compra` | Órdenes de compra |
+| `/usuarios` | Gestión de usuarios |
+
+## Comandos Artisan útiles
+
+```bash
+# Limpiar caché
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan cache:clear
+
+# Regenerar seeders
+php artisan db:seed
+
+# Listar rutas
+php artisan route:list
+
+# Ver permisos
+php artisan permission:cache-reset
+```
+
+## Paquetes instalados
+
+- [Laravel Framework](https://laravel.com) - Framework principal
+- [Spatie Permission](https://spatie.be/docs/laravel-permission) - RBAC
+- [Maatwebsite Excel](https://docs.laravel-excel.com) - Exportación Excel
+
+## Licencia
+
+Este proyecto es de uso libre para fines educativos y comerciales.
