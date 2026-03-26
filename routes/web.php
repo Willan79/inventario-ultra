@@ -8,6 +8,8 @@ use App\Http\Controllers\Web\WarehouseController;
 use App\Http\Controllers\Web\InventoryController;
 use App\Http\Controllers\Web\MovementController;
 use App\Http\Controllers\Web\CategoryController;
+use App\Http\Controllers\Web\SupplierController;
+use App\Http\Controllers\Web\PurchaseOrderController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\ReportController;
 
@@ -66,6 +68,29 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy')->middleware('permission:categories.delete');
     });
 
+    Route::prefix('proveedores')->name('web.proveedores.')->group(function () {
+        Route::get('/', [SupplierController::class, 'index'])->name('index')->middleware('permission:suppliers.view');
+        Route::get('/crear', [SupplierController::class, 'create'])->name('create')->middleware('permission:suppliers.create');
+        Route::post('/', [SupplierController::class, 'store'])->name('store')->middleware('permission:suppliers.create');
+        Route::get('/{id}/editar', [SupplierController::class, 'edit'])->name('edit')->middleware('permission:suppliers.update');
+        Route::put('/{id}', [SupplierController::class, 'update'])->name('update')->middleware('permission:suppliers.update');
+        Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('destroy')->middleware('permission:suppliers.delete');
+        Route::post('/{id}/toggle-active', [SupplierController::class, 'toggleActive'])->name('toggle-active')->middleware('permission:suppliers.update');
+    });
+
+    Route::prefix('ordenes-compra')->name('web.ordenes-compra.')->group(function () {
+        Route::get('/', [PurchaseOrderController::class, 'index'])->name('index')->middleware('permission:suppliers.view');
+        Route::get('/crear', [PurchaseOrderController::class, 'create'])->name('create')->middleware('permission:suppliers.create');
+        Route::post('/', [PurchaseOrderController::class, 'store'])->name('store')->middleware('permission:suppliers.create');
+        Route::get('/{id}', [PurchaseOrderController::class, 'show'])->name('show')->middleware('permission:suppliers.view');
+        Route::get('/{id}/editar', [PurchaseOrderController::class, 'edit'])->name('edit')->middleware('permission:suppliers.update');
+        Route::put('/{id}', [PurchaseOrderController::class, 'update'])->name('update')->middleware('permission:suppliers.update');
+        Route::delete('/{id}', [PurchaseOrderController::class, 'destroy'])->name('destroy')->middleware('permission:suppliers.delete');
+        Route::post('/{id}/enviar', [PurchaseOrderController::class, 'send'])->name('send')->middleware('permission:suppliers.update');
+        Route::post('/{id}/recibir', [PurchaseOrderController::class, 'receive'])->name('receive')->middleware('permission:suppliers.update');
+        Route::post('/{id}/cancelar', [PurchaseOrderController::class, 'cancel'])->name('cancel')->middleware('permission:suppliers.update');
+    });
+
     Route::prefix('usuarios')->name('web.usuarios.')->middleware('role:super')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/crear', [UserController::class, 'create'])->name('create');
@@ -80,52 +105,5 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/movimientos/excel', [ReportController::class, 'movements'])->name('movimientos.excel');
         Route::get('/productos/excel', [ReportController::class, 'products'])->name('productos.excel');
         Route::get('/almacenes/excel', [ReportController::class, 'warehouses'])->name('almacenes.excel');
-    });
- //});
-
-    Route::prefix('almacenes')->name('web.almacenes.')->group(function () {
-        Route::get('/', [WarehouseController::class, 'index'])->name('index')->middleware('permission:warehouses.view');
-        Route::get('/crear', [WarehouseController::class, 'create'])->name('create')->middleware('permission:warehouses.create');
-        Route::post('/', [WarehouseController::class, 'store'])->name('store')->middleware('permission:warehouses.create');
-        Route::get('/{id}', [WarehouseController::class, 'show'])->name('show')->middleware('permission:warehouses.view');
-        Route::get('/{id}/editar', [WarehouseController::class, 'edit'])->name('edit')->middleware('permission:warehouses.update');
-        Route::put('/{id}', [WarehouseController::class, 'update'])->name('update')->middleware('permission:warehouses.update');
-        Route::delete('/{id}', [WarehouseController::class, 'destroy'])->name('destroy')->middleware('permission:warehouses.delete');
-        Route::post('/{id}/toggle-active', [WarehouseController::class, 'toggleActive'])->name('toggle-active')->middleware('permission:warehouses.update');
-    });
-
-    Route::prefix('inventario')->name('web.inventario.')->group(function () {
-        Route::get('/', [InventoryController::class, 'index'])->name('index')->middleware('permission:inventory.view');
-        Route::get('/stock-bajo', [InventoryController::class, 'lowStock'])->name('low-stock')->middleware('permission:inventory.view');
-        Route::get('/agregar-stock', [InventoryController::class, 'addStock'])->name('add-stock')->middleware('permission:inventory.add');
-        Route::post('/agregar-stock', [InventoryController::class, 'storeStock'])->name('store-stock')->middleware('permission:inventory.add');
-        Route::get('/remover-stock', [InventoryController::class, 'removeStock'])->name('remove-stock')->middleware('permission:inventory.remove');
-        Route::post('/remover-stock', [InventoryController::class, 'storeRemoveStock'])->name('store-remove-stock')->middleware('permission:inventory.remove');
-        Route::get('/ajustar-stock', [InventoryController::class, 'adjustStock'])->name('adjust-stock')->middleware('permission:inventory.adjust');
-        Route::post('/ajustar-stock', [InventoryController::class, 'storeAdjustStock'])->name('store-adjust-stock')->middleware('permission:inventory.adjust');
-        Route::get('/transferir', [InventoryController::class, 'transfer'])->name('transfer')->middleware('permission:inventory.transfer');
-        Route::post('/transferir', [InventoryController::class, 'storeTransfer'])->name('store-transfer')->middleware('permission:inventory.transfer');
-    });
-
-    Route::prefix('movimientos')->name('web.movimientos.')->group(function () {
-        Route::get('/', [MovementController::class, 'index'])->name('index')->middleware('permission:movements.view');
-    });
-
-    Route::prefix('categorias')->name('web.categorias.')->group(function () {
-        Route::get('/', [CategoryController::class, 'index'])->name('index')->middleware('permission:categories.view');
-        Route::get('/crear', [CategoryController::class, 'create'])->name('create')->middleware('permission:categories.create');
-        Route::post('/', [CategoryController::class, 'store'])->name('store')->middleware('permission:categories.create');
-        Route::get('/{id}/editar', [CategoryController::class, 'edit'])->name('edit')->middleware('permission:categories.update');
-        Route::put('/{id}', [CategoryController::class, 'update'])->name('update')->middleware('permission:categories.update');
-        Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy')->middleware('permission:categories.delete');
-    });
-
-    Route::prefix('usuarios')->name('web.usuarios.')->middleware('role:super')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('index');
-        Route::get('/crear', [UserController::class, 'create'])->name('create');
-        Route::post('/', [UserController::class, 'store'])->name('store');
-        Route::get('/{id}/editar', [UserController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [UserController::class, 'update'])->name('update');
-        Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
     });
 });

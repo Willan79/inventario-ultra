@@ -54,7 +54,10 @@ class InventoryService
         float $quantity,
         ?float $unitCost = null,
         ?string $notes = null,
-        ?int $createdBy = null
+        ?int $createdBy = null,
+        ?int $supplierId = null,
+        ?string $referenceType = null,
+        ?int $referenceId = null
     ): InventoryDTO {
         $inventory = $this->getOrCreateInventory($productId, $warehouseId);
         
@@ -71,7 +74,10 @@ class InventoryService
             $inventory->getQuantityAvailable(),
             $unitCost,
             $notes,
-            $createdBy
+            $createdBy,
+            $supplierId,
+            $referenceType,
+            $referenceId
         );
 
         return $this->toDTO($inventory);
@@ -241,7 +247,10 @@ class InventoryService
         float $newQty,
         ?float $unitCost = null,
         ?string $notes = null,
-        ?int $createdBy = null
+        ?int $createdBy = null,
+        ?int $supplierId = null,
+        ?string $referenceType = null,
+        ?int $referenceId = null
     ): Movement {
         $movement = new Movement(
             uuid: Str::uuid()->toString(),
@@ -253,7 +262,10 @@ class InventoryService
             newQuantity: $newQty,
             unitCost: $unitCost,
             notes: $notes,
-            createdBy: $createdBy
+            createdBy: $createdBy,
+            supplierId: $supplierId,
+            referenceType: $referenceType,
+            referenceId: $referenceId
         );
 
         return $this->movementRepository->save($movement);

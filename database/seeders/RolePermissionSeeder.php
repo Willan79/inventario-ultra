@@ -39,6 +39,12 @@ class RolePermissionSeeder extends Seeder
             // Movements
             'movements.view',
 
+            // Suppliers
+            'suppliers.view',
+            'suppliers.create',
+            'suppliers.update',
+            'suppliers.delete',
+
             // Users (admin only)
             'users.view',
             'users.create',
@@ -69,6 +75,7 @@ class RolePermissionSeeder extends Seeder
             'products.view',
             'warehouses.view',
             'categories.view',
+            'suppliers.view',
             'inventory.view',
             'movements.view',
         ]);

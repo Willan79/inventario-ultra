@@ -19,6 +19,7 @@ class Movement
     private string $uuid;
     private int $productId;
     private int $warehouseId;
+    private ?int $supplierId;
     private string $movementType;
     private ?string $referenceType;
     private ?int $referenceId;
@@ -43,12 +44,14 @@ class Movement
         ?int $referenceId = null,
         ?float $unitCost = null,
         ?string $notes = null,
-        ?int $createdBy = null
+        ?int $createdBy = null,
+        ?int $supplierId = null
     ) {
         $this->validateMovementType($movementType);
         $this->uuid = $uuid;
         $this->productId = $productId;
         $this->warehouseId = $warehouseId;
+        $this->supplierId = $supplierId;
         $this->movementType = $movementType;
         $this->quantity = abs($quantity);
         $this->previousQuantity = $previousQuantity;
@@ -86,6 +89,11 @@ class Movement
     public function getWarehouseId(): int
     {
         return $this->warehouseId;
+    }
+
+    public function getSupplierId(): ?int
+    {
+        return $this->supplierId;
     }
 
     public function getMovementType(): string

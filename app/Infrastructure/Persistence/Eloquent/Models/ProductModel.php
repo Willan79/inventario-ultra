@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductModel extends Model
@@ -59,6 +60,13 @@ class ProductModel extends Model
     public function movements(): HasMany
     {
         return $this->hasMany(MovementModel::class, 'product_id');
+    }
+
+    public function suppliers(): BelongsToMany
+    {
+        return $this->belongsToMany(SupplierModel::class, 'product_supplier', 'product_id', 'supplier_id')
+            ->withPivot(['supplier_sku', 'cost_price', 'lead_time_days', 'is_preferred'])
+            ->withTimestamps();
     }
 
     public function scopeActive($query)

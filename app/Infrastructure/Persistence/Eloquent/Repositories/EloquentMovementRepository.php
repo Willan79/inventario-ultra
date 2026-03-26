@@ -150,6 +150,7 @@ class EloquentMovementRepository implements MovementRepositoryInterface
             'uuid' => $movement->getUuid(),
             'product_id' => $movement->getProductId(),
             'warehouse_id' => $movement->getWarehouseId(),
+            'supplier_id' => $movement->getSupplierId(),
             'movement_type' => $movement->getMovementType(),
             'reference_type' => $movement->getReferenceType(),
             'reference_id' => $movement->getReferenceId(),
@@ -179,7 +180,8 @@ class EloquentMovementRepository implements MovementRepositoryInterface
             $model->reference_id,
             $model->unit_cost ? (float) $model->unit_cost : null,
             $model->notes,
-            $model->created_by
+            $model->created_by,
+            $model->supplier_id
         );
         return $entity->setId($model->id);
     }

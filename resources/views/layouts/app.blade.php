@@ -120,6 +120,20 @@
                         </a>
                     </li>
                     @endcan
+                    @can('suppliers.view')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('web.proveedores.*') ? 'active' : '' }}" href="{{ route('web.proveedores.index') }}">
+                            <i class="bi bi-truck"></i> Proveedores
+                        </a>
+                    </li>
+                    @endcan
+                    @can('suppliers.view')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('web.ordenes-compra.*') ? 'active' : '' }}" href="{{ route('web.ordenes-compra.index') }}">
+                            <i class="bi bi-cart3"></i> Órdenes de Compra
+                        </a>
+                    </li>
+                    @endcan
                     @role('super|admin')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('web.usuarios.*') ? 'active' : '' }}" href="{{ route('web.usuarios.index') }}">
