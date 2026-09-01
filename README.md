@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/images/InU.jpg" alt="FlexPos" width="400">
+</p>
+
 # Inventario Ultra
 
 Sistema de gestión de inventario empresarial desarrollado con Laravel 12.
